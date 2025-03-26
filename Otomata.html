@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Number Detector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20220226/pngtree-advance-of-numbers-science-symbol-composition-photo-image_3487615.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.88);
+            z-index: -1;
+        }
+        
+        .container {
+            border: 1px solid #d1d8e0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.92);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 3.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        
+        h3 {
+            color: #16a085;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            margin: 10px 0 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: border 0.3s;
+        }
+        
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        button {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        #result {
+            margin: 25px 0;
+            padding: 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .valid {
+            background-color: #e8f8f5;
+            color: #27ae60;
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .invalid {
+            background-color: #fdedec;
+            color: #e74c3c;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .explanation {
+            background-color: rgba(248, 249, 250, 0.85);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 40px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .examples {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: rgba(234, 242, 248, 0.85);
+            border-radius: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(249, 249, 249, 0.9);
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-weight: bold;
+            padding: 20px;
+            background-color: rgba(55, 62, 68, 0.95);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+        }
+        
+        .header-image {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            border: 1px solid #e1b8b8;
+        }
+        
+        .sci-notation {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        
+        .component {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .coefficient {
+            background-color: #d6eaf8;
+            color: #2874a6;
+        }
+        
+        .exponent {
+            background-color: #d5f5e3;
+            color: #1e8449;
+        }
+        
+        .base {
+            background-color: #fdedec;
+            color: #c0392b;
+        }
+        
+        .interactive-example {
+            background-color: #eaf2f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .toggle-content {
+            display: none;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            margin-top: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .toggle-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .toggle-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .why-important {
+            background-color: #e8f8f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #1abc9c;
+        }
+        
+        .conversion-example {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .arrow {
+            font-size: 1.5em;
+            padding: 0 15px;
+            color: #7f8c8d;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .language-btn i {
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .language-btn:hover i {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <button class="language-btn" id="languageToggle">
+            <i class="fas fa-exchange-alt"></i> 
+            <span id="languageText">ID / EN</span>
+        </button>
+    </div>
+    
+    <div class="container">
+        <h1 id="title">Scientific Number Detector</h1>
+        
+        <form onsubmit="validateNumber(event)">
+            <label for="numberInput" id="inputLabel">Enter a number</label>
+            <input type="text" id="numberInput" placeholder="e.g., -1.23e-5, 6.022e23, 3.14159">
+            <button type="submit" id="detectBtn">Detect</button>
+        </form>
+        
+        <div id="result"></div>
+        
+        <div class="explanation">
+            <h2 id="sciNotationTitle">Scientific Notation</h2>
+            
+            <p id="sciNotationDesc">Scientific notation (also called standard form or exponential notation) is a method of writing numbers that accommodates values too large or too small to be conveniently written in standard decimal form.</p>
+            
+            <div class="sci-notation">
+                <span class="component coefficient" id="coefficientLabel">coefficient</span>
+                × 
+                <span class="component base">10</span>
+                <sup class="component exponent" id="exponentLabel">exponent</sup>
+            </div>
+            
+            <h3 id="componentsTitle">Key Components:</h3>
+            <ul>
+                <li><strong id="coefficientDef">Coefficient</strong>: <span id="coefficientDesc">A real number (usually between 1 and 10)</span></li>
+                <li><strong id="baseDef">Base</strong>: <span id="baseDesc">Always 10 in scientific notation</span></li>
+                <li><strong id="exponentDef">Exponent</strong>: <span id="exponentDesc">An integer that indicates how many places to move the decimal point</span></li>
+            </ul>
+            
+            <div class="why-important">
+                <h3 id="importanceTitle">Why Use Scientific Notation?</h3>
+                <ul>
+                    <li id="importance1">Simplifies working with extremely large or small numbers</li>
+                    <li id="importance2">Makes calculations easier by standardizing the scale</li>
+                    <li id="importance3">Clearly indicates the precision of measurements</li>
+                    <li id="importance4">Essential in scientific and engineering fields</li>
+                    <li id="importance5">Reduces errors from counting zeros</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-example">
+                <h3 id="howItWorks">How It Works:</h3>
+                
+                <div class="conversion-example">
+                    <div id="example1">300,000,000 m/s (speed of light)</div>
+                    <div class="arrow">→</div>
+                    <div>3 × 10<sup>8</sup> m/s</div>
+                </div>
+                
+                <div class="conversion-example">
+                    <div id="example2">0.00000000016 C (charge of electron)</div>
+                    <div class="arrow">→</div>
+                    <div>1.6 × 10<sup>-19</sup> C</div>
+                </div>
+                
+                <button class="toggle-btn" onclick="toggleContent('more-examples')" id="moreExamplesBtn">Show More Examples</button>
+                <div id="more-examples" class="toggle-content">
+                    <div class="conversion-example">
+                        <div id="example3">602,200,000,000,000,000,000,000 (Avogadro's number)</div>
+                        <div class="arrow">→</div>
+                        <div>6.022 × 10<sup>23</sup></div>
+                    </div>
+                    <div class="conversion-example">
+                        <div id="example4">0.000000001 m (nanometer)</div>
+                        <div class="arrow">→</div>
+                        <div>1 × 10<sup>-9</sup> m</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="examples">
+                <h3 id="eNotationTitle">Computer Scientific Notation (E-notation)</h3>
+                <p id="eNotationDesc">In computing and programming, scientific notation is often represented using "E" or "e" to mean "×10^":</p>
+                
+                <table>
+                    <tr>
+                        <th id="standardForm">Standard Form</th>
+                        <th id="eNotation">E-notation</th>
+                        <th id="value">Value</th>
+                    </tr>
+                    <tr>
+                        <td>3.0 × 10<sup>8</sup></td>
+                        <td>3.0e8</td>
+                        <td>300,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>1.6 × 10<sup>-19</sup></td>
+                        <td>1.6e-19</td>
+                        <td>0.00000000000000000016</td>
+                    </tr>
+                    <tr>
+                        <td>-2.5 × 10<sup>3</sup></td>
+                        <td>-2.5e3</td>
+                        <td>-2,500</td>
+                    </tr>
+                </table>
+                
+                <h3 id="validFormats">Valid Input Formats:</h3>
+                <table>
+                    <tr>
+                        <th id="type">Type</th>
+                        <th id="examples">Examples</th>
+                        <th id="notes">Notes</th>
+                    </tr>
+                    <tr>
+                        <td id="regularNumbers">Regular numbers</td>
+                        <td>123, -45.67, 0.004</td>
+                        <td id="regularNote">Automatically valid as coefficient-only</td>
+                    </tr>
+                    <tr>
+                        <td id="eNotationType">E-notation</td>
+                        <td>1.23e4, -5.6E-7, 2e+10</td>
+                        <td id="eNotationNote">Case insensitive (e or E)</td>
+                    </tr>
+                    <tr>
+                        <td id="edgeCases">Edge cases</td>
+                        <td>.5, 1., 1e5</td>
+                        <td id="edgeNote">Valid but requires careful parsing</td>
+                    </tr>
+                </table>
+                
+                <h3 id="invalidFormats">Invalid Formats:</h3>
+                <table>
+                    <tr>
+                        <th id="errorType">Error Type</th>
+                        <th id="invalidExamples">Examples</th>
+                        <th id="reason">Reason</th>
+                    </tr>
+                    <tr>
+                        <td id="multipleDecimals">Multiple decimals</td>
+                        <td>1.2.3, 4..5</td>
+                        <td id="decimalReason">Only one decimal point allowed</td>
+                    </tr>
+                    <tr>
+                        <td id="malformedExponent">Malformed exponent</td>
+                        <td>1.2e, e5, 3e+</td>
+                        <td id="exponentReason">Exponent must have digits</td>
+                    </tr>
+                    <tr>
+                        <td id="invalidChars">Invalid characters</td>
+                        <td>1a3, 4.5x2, abc</td>
+                        <td id="charReason">Only digits, decimal, e/E, and signs</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="why-important">
+                <h3 id="applicationsTitle">Real-World Applications</h3>
+                <ul>
+                    <li><strong id="astronomy">Astronomy</strong>: <span id="astronomyDesc">Distances between celestial bodies (e.g., 1.5 × 10<sup>8</sup> km Earth-Sun distance)</span></li>
+                    <li><strong id="physics">Physics</strong>: <span id="physicsDesc">Subatomic particle sizes (e.g., 1 × 10<sup>-15</sup> m for protons)</span></li>
+                    <li><strong id="chemistry">Chemistry</strong>: <span id="chemistryDesc">Avogadro's number (6.022 × 10<sup>23</sup> particles/mol)</span></li>
+                    <li><strong id="engineering">Engineering</strong>: <span id="engineeringDesc">Electrical resistances (e.g., 1 × 10<sup>6</sup> ohms)</span></li>
+                    <li><strong id="biology">Biology</strong>: <span id="biologyDesc">Microorganism sizes (e.g., 2 × 10<sup>-6</sup> m for bacteria)</span></li>
+                </ul>
+            </div>
+        </div>
+        <p id="detectorNote">The detector will reject invalid formats like empty inputs, multiple decimal points, or improperly formatted exponents.</p>
+    </div>
+
+    <div class="footer">
+        <p>Jonathan Songgigilan</p>
+        <p>221011030049</p>
+        <p>Mathematics</p>
+    </div>
+
+    <script>
+        // Language content
+        const content = {
+            en: {
+                title: "Scientific Number Detector",
+                inputLabel: "Enter a number",
+                detectBtn: "Detect",
+                sciNotationTitle: "Scientific Notation",
+                sciNotationDesc: "Scientific notation (also called standard form or exponential notation) is a method of writing numbers that accommodates values too large or too small to be conveniently written in standard decimal form.",
+                coefficientLabel: "coefficient",
+                exponentLabel: "exponent",
+                componentsTitle: "Key Components:",
+                coefficientDef: "Coefficient",
+                coefficientDesc: "A real number (usually between 1 and 10)",
+                baseDef: "Base",
+                baseDesc: "Always 10 in scientific notation",
+                exponentDef: "Exponent",
+                exponentDesc: "An integer that indicates how many places to move the decimal point",
+                importanceTitle: "Why Use Scientific Notation?",
+                importance1: "Simplifies working with extremely large or small numbers",
+                importance2: "Makes calculations easier by standardizing the scale",
+                importance3: "Clearly indicates the precision of measurements",
+                importance4: "Essential in scientific and engineering fields",
+                importance5: "Reduces errors from counting zeros",
+                howItWorks: "How It Works:",
+                example1: "300,000,000 m/s (speed of light)",
+                example2: "0.00000000016 C (charge of electron)",
+                example3: "602,200,000,000,000,000,000,000 (Avogadro's number)",
+                example4: "0.000000001 m (nanometer)",
+                moreExamplesBtn: "Show More Examples",
+                eNotationTitle: "Computer Scientific Notation (E-notation)",
+                eNotationDesc: "In computing and programming, scientific notation is often represented using \"E\" or \"e\" to mean \"×10^\":",
+                standardForm: "Standard Form",
+                eNotation: "E-notation",
+                value: "Value",
+                validFormats: "Valid Input Formats:",
+                type: "Type",
+                examples: "Examples",
+                notes: "Notes",
+                regularNumbers: "Regular numbers",
+                regularNote: "Automatically valid as coefficient-only",
+                eNotationType: "E-notation",
+                eNotationNote: "Case insensitive (e or E)",
+                edgeCases: "Edge cases",
+                edgeNote: "Valid but requires careful parsing",
+                invalidFormats: "Invalid Formats:",
+                errorType: "Error Type",
+                invalidExamples: "Examples",
+                reason: "Reason",
+                multipleDecimals: "Multiple decimals",
+                decimalReason: "Only one decimal point allowed",
+                malformedExponent: "Malformed exponent",
+                exponentReason: "Exponent must have digits",
+                invalidChars: "Invalid characters",
+                charReason: "Only digits, decimal, e/E, and signs",
+                applicationsTitle: "Real-World Applications",
+                astronomy: "Astronomy",
+                astronomyDesc: "Distances between celestial bodies (e.g., 1.5 × 10<sup>8</sup> km Earth-Sun distance)",
+                physics: "Physics",
+                physicsDesc: "Subatomic particle sizes (e.g., 1 × 10<sup>-15</sup> m for protons)",
+                chemistry: "Chemistry",
+                chemistryDesc: "Avogadro's number (6.022 × 10<sup>23</sup> particles/mol)",
+                engineering: "Engineering",
+                engineeringDesc: "Electrical resistances (e.g., 1 × 10<sup>6</sup> ohms)",
+                biology: "Biology",
+                biologyDesc: "Microorganism sizes (e.g., 2 × 10<sup>-6</sup> m for bacteria)",
+                detectorNote: "The detector will reject invalid formats like empty inputs, multiple decimal points, or improperly formatted exponents."
+            },
+            id: {
+                title: "Pendeteksi Notasi Ilmiah",
+                inputLabel: "Masukkan angka",
+                detectBtn: "Deteksi",
+                sciNotationTitle: "Notasi Ilmiah",
+                sciNotationDesc: "Notasi ilmiah (juga disebut bentuk standar atau notasi eksponensial) adalah metode penulisan angka yang dapat menampung nilai terlalu besar atau terlalu kecil untuk ditulis secara mudah dalam bentuk desimal standar.",
+                coefficientLabel: "koefisien",
+                exponentLabel: "eksponen",
+                componentsTitle: "Komponen Utama:",
+                coefficientDef: "Koefisien",
+                coefficientDesc: "Bilangan riil (biasanya antara 1 dan 10)",
+                baseDef: "Basis",
+                baseDesc: "Selalu 10 dalam notasi ilmiah",
+                exponentDef: "Eksponen",
+                exponentDesc: "Bilangan bulat yang menunjukkan berapa tempat untuk memindahkan titik desimal",
+                importanceTitle: "Mengapa Menggunakan Notasi Ilmiah?",
+                importance1: "Menyederhanakan pekerjaan dengan angka yang sangat besar atau kecil",
+                importance2: "Memudahkan perhitungan dengan standarisasi skala",
+                importance3: "Menunjukkan presisi pengukuran dengan jelas",
+                importance4: "Penting dalam bidang sains dan teknik",
+                importance5: "Mengurangi kesalahan dalam menghitung nol",
+                howItWorks: "Cara Kerjanya:",
+                example1: "300.000.000 m/s (kecepatan cahaya)",
+                example2: "0,00000000016 C (muatan elektron)",
+                example3: "602.200.000.000.000.000.000.000 (bilangan Avogadro)",
+                example4: "0,000000001 m (nanometer)",
+                moreExamplesBtn: "Tampilkan Contoh Lain",
+                eNotationTitle: "Notasi Ilmiah Komputer (E-notasi)",
+                eNotationDesc: "Dalam komputasi dan pemrograman, notasi ilmiah sering direpresentasikan menggunakan \"E\" atau \"e\" yang berarti \"×10^\":",
+                standardForm: "Bentuk Standar",
+                eNotation: "E-notasi",
+                value: "Nilai",
+                validFormats: "Format Input yang Valid:",
+                type: "Tipe",
+                examples: "Contoh",
+                notes: "Catatan",
+                regularNumbers: "Angka biasa",
+                regularNote: "Otomatis valid sebagai koefisien saja",
+                eNotationType: "E-notasi",
+                eNotationNote: "Tidak case sensitive (e atau E)",
+                edgeCases: "Kasus khusus",
+                edgeNote: "Valid tetapi memerlukan parsing yang hati-hati",
+                invalidFormats: "Format Tidak Valid:",
+                errorType: "Jenis Error",
+                invalidExamples: "Contoh",
+                reason: "Alasan",
+                multipleDecimals: "Banyak titik desimal",
+                decimalReason: "Hanya satu titik desimal yang diperbolehkan",
+                malformedExponent: "Eksponen tidak lengkap",
+                exponentReason: "Eksponen harus memiliki digit",
+                invalidChars: "Karakter tidak valid",
+                charReason: "Hanya digit, desimal, e/E, dan tanda yang diperbolehkan",
+                applicationsTitle: "Aplikasi Dunia Nyata",
+                astronomy: "Astronomi",
+                astronomyDesc: "Jarak antara benda langit (misal: 1,5 × 10<sup>8</sup> km jarak Bumi-Matahari)",
+                physics: "Fisika",
+                physicsDesc: "Ukuran partikel subatomik (misal: 1 × 10<sup>-15</sup> m untuk proton)",
+                chemistry: "Kimia",
+                chemistryDesc: "Bilangan Avogadro (6,022 × 10<sup>23</sup> partikel/mol)",
+                engineering: "Teknik",
+                engineeringDesc: "Resistansi listrik (misal: 1 × 10<sup>6</sup> ohm)",
+                biology: "Biologi",
+                biologyDesc: "Ukuran mikroorganisme (misal: 2 × 10<sup>-6</sup> m untuk bakteri)",
+                detectorNote: "Detektor akan menolak format tidak valid seperti input kosong, banyak titik desimal, atau eksponen yang tidak diformat dengan benar."
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'id' : 'en';
+            updateContent();
+        }
+
+        function updateContent() {
+            const langContent = content[currentLang];
+            for (const [key, value] of Object.entries(langContent)) {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (key.endsWith('Desc') || key.endsWith('Note') || key.endsWith('Reason')) {
+                        element.innerHTML = value;
+                    } else {
+                        element.textContent = value;
+                    }
+                }
+            }
+            document.getElementById('languageText').textContent = currentLang === 'en' ? 'ID / EN' : 'EN / ID';
+        }
+
+        function validateNumber(event) {
+            event.preventDefault();
+            const input = document.getElementById('numberInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (input === "") {
+            resultDiv.textContent = currentLang === 'en'
+            ? resultDiv.textContent = "Please enter a number"
+            : resultDiv.textContent = "Mohon Masukkan angka";
+            resultDiv.className = "invalid";
+            return;
+        }
+            // Enhanced regular expression pattern
+            const pattern = /^[+-]?(?:(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?|\d+\.\d*|\.\d+|\d+)$/;
+            
+            // Additional validation checks
+            const isValid = pattern.test(input) && 
+                          !/^[+-]?\.?$/.test(input) &&  // Block ".", "+.", "-."
+                          !/^[+-]?\d+\.$/.test(input);  // Block "123.", "+123."
+            
+            if (isValid) {
+                const numberValue = parseFloat(input);
+                if (isNaN(numberValue)) {
+                    resultDiv.textContent = currentLang === 'en' 
+                        ? `"${input}" is not a valid scientific number` 
+                        : `"${input}" bukan angka ilmiah yang valid`;
+                    resultDiv.className = "invalid";
+                } else {
+                    // Format the number to show its scientific notation
+                    const sciNotation = numberValue.toExponential();
+                    const typeText = currentLang === 'en' 
+                        ? `${numberValue >= 0 ? 'Positive' : 'Negative'} ${Math.abs(numberValue) >= 1 ? 'large' : 'small'} number`
+                        : `${numberValue >= 0 ? 'Positif' : 'Negatif'} ${Math.abs(numberValue) >= 1 ? 'besar' : 'kecil'}`;
+                    
+                    resultDiv.innerHTML = currentLang === 'en'
+                        ? `<div>"${input}" is a valid scientific number</div>
+                           <div>Decimal value: ${numberValue}</div>
+                           <div>Scientific notation: ${sciNotation}</div>
+                           <div>Type: ${typeText}</div>`
+                        : `<div>"${input}" adalah angka ilmiah yang valid</div>
+                           <div>Nilai desimal: ${numberValue}</div>
+                           <div>Notasi ilmiah: ${sciNotation}</div>
+                           <div>Tipe: Angka ${typeText}</div>`;
+                    resultDiv.className = "valid";
+                }
+            } else {
+                resultDiv.textContent = currentLang === 'en'
+                    ? `"${input || 'empty input'}" is not a valid scientific number`
+                    : `"${input || 'input kosong'}" bukan angka ilmiah yang valid`;
+                resultDiv.className = "invalid";
+            }
+        }
+        
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            const btn = event.target;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                btn.textContent = currentLang === 'en' ? "Show More Examples" : "Tampilkan Contoh Lain";
+            } else {
+                content.style.display = "block";
+                btn.textContent = currentLang === 'en' ? "Hide Examples" : "Sembunyikan Contoh";
+            }
+        }
+
+        // Initialize
+        document.getElementById('languageToggle').addEventListener('click', toggleLanguage);
+        updateContent();
+    </script>
+</body>
+</html>
